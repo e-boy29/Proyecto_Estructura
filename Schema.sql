@@ -1,35 +1,32 @@
-create database reporte;
-use reporte;
-
-create table clientes(
-no_cliente int Primary Key,
-nombre_cliente varchar(35) not null,
-apellido_cliente varchar(20) not null,
-direccion_cliente varchar(35),
-telefono_cliente varchar(12) not null,
-email_cliente varchar(35) not null,
+CREATE TABLE IF NOT EXISTS Equipos (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Nombre TEXT NOT NULL,
+    Descripcion TEXT,
+    Disponible INTEGER NOT NULL DEFAULT 1
 );
 
-select * from clientes;
+CREATE TABLE IF NOT EXISTS Empleados (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Nombre TEXT NOT NULL,
+    Departamento TEXT,
+    Email TEXT
+);
 
-create table lista_espera(
-tipo_equipo varchar(10) Primary key,
-id_equipo varchar(10) not null,
-no_cliente int not null,
-fecha_entrega date not null,
-fecha_regreso date not null,
-foreign key (no_cliente) references clientes (no_cliente));
+CREATE TABLE IF NOT EXISTS Prestamos (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    EquipoId INTEGER NOT NULL,
+    EmpleadoId INTEGER NOT NULL,
+    FechaPrestamo TEXT NOT NULL,
+    FechaDevolucion TEXT,
+    Estado TEXT NOT NULL DEFAULT 'Activo',
+    FOREIGN KEY (EquipoId) REFERENCES Equipos(Id),
+    FOREIGN KEY (EmpleadoId) REFERENCES Empleados(Id)
+);
 
-select * from lista_espera;
+-- Datos de prueba
+INSERT INTO Equipos (Nombre, Descripcion, Disponible) VALUES ('Laptop Dell', 'Core i7 16GB RAM', 1);
+INSERT INTO Equipos (Nombre, Descripcion, Disponible) VALUES ('Cámara Canon', 'EOS Rebel T7', 1);
+INSERT INTO Equipos (Nombre, Descripcion, Disponible) VALUES ('Proyector Epson', 'HDMI 1080p', 1);
 
-create table equipo(
-id_equipo varchar(10) Primary key,
-marca_equipo varchar(20) not null,
-modelo_equipo varchar(25) not null,
-no_serie varchar(15) not null,
-costo varchar(20) not null,
-tipo_equipo varchar(10) not null,
-disponible varchar(2) not null,
-foreign key (tipo_equipo) references lista_espera (tipo_equipo));
-
-select * from equipo;
+INSERT INTO Empleados (Nombre, Departamento, Email) VALUES ('Ana García', 'TI', 'ana@empresa.com');
+INSERT INTO Empleados (Nombre, Departamento, Email) VALUES ('Luis Pérez', 'Marketing', 'luis@empresa.com');
